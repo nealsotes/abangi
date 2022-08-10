@@ -7,7 +7,6 @@ import 'package:abangi_v1/api/api.dart';
 import 'package:abangi_v1/pages/dash.dart';
 import 'package:flutter/material.dart';
 import 'package:abangi_v1/pages/signup.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(const Login());
 

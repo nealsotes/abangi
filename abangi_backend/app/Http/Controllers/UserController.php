@@ -37,7 +37,14 @@ class UserController extends Controller
         ];
         $validator = Validator::make($request->all(),$rules);
         if($validator->fails()){
-            return response()->json($validator->errors(), 400);
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => 'Email already exists',
+                ],
+                400
+            
+            );
         }
         $user=User::create([
             'fullname' => $request->fullname,
