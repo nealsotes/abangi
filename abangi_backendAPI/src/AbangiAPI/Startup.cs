@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using AbangiAPI.Data; 
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace AbangiAPI
 {
@@ -24,10 +25,17 @@ namespace AbangiAPI
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            var builder = new NpgsqlConnectionStringBuilder();
+            builder.ConnectionString = Configuration.GetConnectionString("PostgreSqlConnection");
+            builder.Username = Configuration["UserID"];
+            builder.Password = Configuration["Password"];
+
+
             services.AddControllers();
-            services.AddDbContext<UserContext>(opt => opt.UseNpgsql(Configuration.GetConnectionString("PostgreSqlConnection")));
+            services.AddDbContext<UserContext>(opt => opt.UseNpgsql(builder.ConnectionString));
            // services.AddScoped<IUserAPIRepo, MockUserAPIRepo>();
            services.AddScoped<IUserAPIRepo, SqlUserAPIRepo>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
