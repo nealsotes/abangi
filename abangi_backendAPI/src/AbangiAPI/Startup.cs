@@ -8,17 +8,26 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using AbangiAPI.Data; 
+using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
 
 namespace AbangiAPI
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddScoped<IUserAPIRepo, MockUserAPIRepo>();
+            services.AddDbContext<UserContext>(opt => opt.UseNpgsql(Configuration.GetConnectionString("PostgreSqlConnection")));
+           // services.AddScoped<IUserAPIRepo, MockUserAPIRepo>();
+           services.AddScoped<IUserAPIRepo, SqlUserAPIRepo>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
